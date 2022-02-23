@@ -37,7 +37,22 @@ static int cmd_q(char *args) {
   return -1;
 }
 
+static int cmd_si(char *args) {
+  int cnt;
+  if ( args == NULL ) {
+    cnt = 1;
+  } else {
+    cnt = *args;
+  }
+
+  printf("Cnt is %d \n", cnt);
+  // cpu_exec(-1);
+  return 0;
+}
+
 static int cmd_help(char *args);
+
+
 
 static struct {
   const char *name;
@@ -46,6 +61,7 @@ static struct {
 } cmd_table [] = {
   { "help", "Display informations about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
+  { "si [N]", "Continue the execution of the program by N steps, and than pause, default N is 1", cmd_si },
   { "q", "Exit NEMU", cmd_q },
 
   /* TODO: Add more commands */
