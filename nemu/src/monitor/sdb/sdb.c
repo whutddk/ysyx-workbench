@@ -47,8 +47,13 @@ static int cmd_si(char *args) {
     cnt = atoi(args);
   }
 
-  printf("Cnt is %d \n", cnt);
-  // cpu_exec(-1);
+  if ( cnt == 0 ) {
+    printf("Parameter Error!\n");
+  } else {
+    cpu_exec(cnt);
+  }
+
+
   return 0;
 }
 
