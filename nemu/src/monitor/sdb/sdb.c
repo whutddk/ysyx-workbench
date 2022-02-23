@@ -4,6 +4,8 @@
 #include <readline/history.h>
 #include "sdb.h"
 
+#include "stdlib.h"
+
 static int is_batch_mode = false;
 
 void init_regex();
@@ -42,7 +44,7 @@ static int cmd_si(char *args) {
   if ( args == NULL ) {
     cnt = 1;
   } else {
-    cnt = *args;
+    cnt = atoi(args);
   }
 
   printf("Cnt is %d \n", cnt);
