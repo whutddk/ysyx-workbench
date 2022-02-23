@@ -61,7 +61,7 @@ static struct {
 } cmd_table [] = {
   { "help", "Display informations about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
-  { "si [N]", "Continue the execution of the program by N steps, and than pause, default N is 1", cmd_si },
+  { "si", "Continue the execution of the program by N steps, and than pause, default N is 1", cmd_si },
   { "q", "Exit NEMU", cmd_q },
 
   /* TODO: Add more commands */
