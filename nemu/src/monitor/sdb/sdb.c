@@ -99,18 +99,13 @@ static int cmd_x(char *args) {
     address_str = cnt_str + strlen(cnt_str) + 1;
     // printf("%s\n", address_str);
 
-    if ( address_str == NULL ) {
 
-      address = 0x80000000;
+    if ( address_str[0] == '0' && address_str[1] == 'x') {
+      address = strtoul (address_str+2, NULL, 16);
     } else {
-
-      printf("%s\n", address_str);
-      if ( address_str[0] == '0' && address_str[1] == 'x') {
-        address = strtoul (address_str+2, NULL, 16);
-      } else {
-        address = atoi(address_str);
-      }
+      address = atoi(address_str);
     }
+    
   }
 
 
