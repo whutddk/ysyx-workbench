@@ -5,6 +5,7 @@
 #include "sdb.h"
 
 #include "stdlib.h"
+#include "memory/paddr.h"
 
 
 static int is_batch_mode = false;
@@ -109,7 +110,10 @@ static int cmd_x(char *args) {
   }
 
 
-  printf("cnt = %d, address = 0x%lx ( %ld )\n", cnt, address, address);
+  // printf("cnt = %d, address = 0x%lx ( %ld )\n", cnt, address, address);
+  for ( int i = 0; i < cnt; i ++ ) {
+    printf( "%ld", paddr_read(address + i*4, i) );
+  }
   
 
   return 0;
