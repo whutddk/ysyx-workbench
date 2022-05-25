@@ -56,6 +56,7 @@ static int cmd_si(char *args) {
 }
 
 static int cmd_info(char *args) {
+  printf( "arg is %s", args );
   return 0;
 }
 
