@@ -85,26 +85,26 @@ static int cmd_x(char *args) {
   long address;
 
   char *cnt_str = strtok(args, " ");
-
-  printf("%s\n", cnt_str);
-  char *address_str = args + strlen(cnt_str) + 1;
-  printf("%s\n", address_str);
-
-
+  char *address_str;
   if (cnt_str == NULL) { 
     cnt = 1;
     address = 0x80000000;
-   } else {
+  } else {
     cnt = atoi(cnt_str);
+
+    printf("%s\n", cnt_str);
+    address_str = args + strlen(cnt_str) + 1;
+
+    printf("%s\n", address_str);
+    if ( address_str == NULL ) {
+      address = 0x80000000;
+    } else if ( address_str[0] == '0' && address_str[1] == 'x') {
+      address = strtoul (address_str+2, NULL, 16);
+    } else {
+      address = atoi(address_str);
+    }
   }
 
-  if ( address_str == NULL ) {
-    address = 0x80000000;
-  } else if ( address_str[0] == '0' && address_str[1] == 'x') {
-    address = strtoul (address_str+2, NULL, 16);
-  } else {
-    address = atoi(address_str);
-  }
 
   printf("cnt = %d, address = 0x%lx ( %ld )\n", cnt, address, address);
   
