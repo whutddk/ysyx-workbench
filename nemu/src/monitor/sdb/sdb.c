@@ -97,6 +97,9 @@ static int cmd_x(char *args) {
     address_str = args + strlen(cnt_str) + 1;
 
     if ( strlen(cnt_str) == strlen(args) ) {
+      printf("%s\n", cnt_str);
+      printf("%s\n", args);
+      printf("%ld, %ld\n", strlen(cnt_str), strlen(args) );
       address = 0x80000000;
     } else {
 
