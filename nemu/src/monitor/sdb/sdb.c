@@ -81,11 +81,15 @@ static int cmd_info(char *args) {
 }
 
 static int cmd_x(char *args) {
-  char *cnt_str = strtok(args, " ");
-  char *address_str = cnt_str + strlen(cnt_str) + 1;
-
   int cnt;
   long address;
+
+  char *cnt_str = strtok(args, " ");
+
+  printf("%s", cnt_str);
+  char *address_str = args + strlen(cnt_str) + 1;
+  printf("%s", address_str);
+
 
   if (cnt_str == NULL) { 
     cnt = 1;
