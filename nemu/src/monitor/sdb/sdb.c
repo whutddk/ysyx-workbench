@@ -84,7 +84,7 @@ static int cmd_x(char *args) {
   int cnt;
   long address ;
 
-  char *orgin = args;
+
   char *cnt_str = strtok(args, " ");
   char *address_str ;
 
@@ -94,15 +94,13 @@ static int cmd_x(char *args) {
   } else {
     cnt = atoi(cnt_str);
 
-    printf("%s\n", cnt_str);
+    // printf("%s\n", cnt_str);
 
     address_str = cnt_str + strlen(cnt_str) + 1;
-    printf("%s\n", address_str);
+    // printf("%s\n", address_str);
 
-    if ( strlen(orgin) == strlen(cnt_str) ) {
-      printf("%s\n", cnt_str);
-      printf("%s\n", orgin);
-      printf("%ld, %ld\n", strlen(cnt_str), strlen(orgin) );
+    if ( address_str == NULL ) {
+
       address = 0x80000000;
     } else {
 
