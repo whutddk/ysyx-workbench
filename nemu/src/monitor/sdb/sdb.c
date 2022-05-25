@@ -96,7 +96,8 @@ static int cmd_x(char *args) {
 
     printf("%s\n", cnt_str);
 
-    address_str = orgin + strlen(cnt_str) + 1;
+    address_str = cnt_str + strlen(cnt_str) + 1;
+    printf("%s\n", address_str);
 
     if ( strlen(orgin) == strlen(cnt_str) ) {
       printf("%s\n", cnt_str);
