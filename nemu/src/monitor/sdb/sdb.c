@@ -61,7 +61,17 @@ static int cmd_info(char *args) {
   extern const char* regs[];
   for (int i = 0; i < 32; i ++) {
     if (strcmp(args, regs[i]) == 0) {
-      printf("args is %s, regs is %s \n", args, regs[i]);
+      printf("%s = 0x%lx ( %ld )  \n", args, cpu.gpr[i], cpu.gpr[i]);
+    }
+    break;
+  }
+  if (strcmp(args, "pc") == 0) {
+    printf("%s = 0x%lx\n", args, cpu.pc);
+  }
+
+  if (strcmp(args, "r") == 0) {
+    for (int i = 0; i < 32; i ++) {
+      printf("%s = 0x%lx ( %ld )  \n", regs[i], cpu.gpr[i], cpu.gpr[i]);
     }
   }
   return 0;
