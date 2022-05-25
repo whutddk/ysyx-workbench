@@ -62,8 +62,8 @@ static int cmd_info(char *args) {
   for (int i = 0; i < 32; i ++) {
     if (strcmp(args, regs[i]) == 0) {
       printf("%s = 0x%lx ( %ld )  \n", args, cpu.gpr[i], cpu.gpr[i]);
+      break;
     }
-    break;
   }
   if (strcmp(args, "pc") == 0) {
     printf("%s = 0x%lx\n", args, cpu.pc);
