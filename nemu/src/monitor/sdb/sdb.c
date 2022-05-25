@@ -70,10 +70,13 @@ static int cmd_info(char *args) {
   }
 
   if (strcmp(args, "r") == 0) {
-    for (int i = 0; i < 32; i ++) {
-      printf("%s = 0x%lx ( %ld )  \n", regs[i], cpu.gpr[i], cpu.gpr[i]);
-    }
+    isa_reg_display();
   }
+
+  if (strcmp(args, "w") == 0) {
+    printf("Warning!! Un-implement feature\n");
+  }
+
   return 0;
 }
 
