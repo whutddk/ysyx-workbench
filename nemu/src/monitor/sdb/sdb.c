@@ -52,10 +52,13 @@ static int cmd_si(char *args) {
   } else {
     cpu_exec(cnt);
   }
-
-
   return 0;
 }
+
+static int cmd_info(char *args) {
+  return 0;
+}
+
 
 static int cmd_help(char *args);
 
@@ -68,8 +71,9 @@ static struct {
 } cmd_table [] = {
   { "help", "Display informations about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
-  { "si", "Continue the execution of the program by N steps, and than pause, default N is 1", cmd_si },
   { "q", "Exit NEMU", cmd_q },
+  { "si", "Continue the execution of the program by N steps, and than pause, default N is 1", cmd_si },
+  { "info", "Display ths status of register for \" info r \" or Display ths status of WatchPoint for \" info w \" ", cmd_info },
 
   /* TODO: Add more commands */
 
