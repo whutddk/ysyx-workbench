@@ -100,8 +100,8 @@ static int cmd_x(char *args) {
 
     if ( strlen(orgin) == strlen(cnt_str) ) {
       printf("%s\n", cnt_str);
-      printf("%s\n", args);
-      printf("%ld, %ld\n", strlen(cnt_str), strlen(args) );
+      printf("%s\n", orgin);
+      printf("%ld, %ld\n", strlen(cnt_str), strlen(orgin) );
       address = 0x80000000;
     } else {
 
