@@ -93,15 +93,19 @@ static int cmd_x(char *args) {
     cnt = atoi(cnt_str);
 
     printf("%s\n", cnt_str);
+
     address_str = args + strlen(cnt_str) + 1;
 
-    printf("%s\n", address_str);
-    if ( address_str == NULL ) {
+    if ( strlen(cnt_str) == strlen(args) ) {
       address = 0x80000000;
-    } else if ( address_str[0] == '0' && address_str[1] == 'x') {
-      address = strtoul (address_str+2, NULL, 16);
     } else {
-      address = atoi(address_str);
+
+      printf("%s\n", address_str);
+      if ( address_str[0] == '0' && address_str[1] == 'x') {
+        address = strtoul (address_str+2, NULL, 16);
+      } else {
+        address = atoi(address_str);
+      }
     }
   }
 
