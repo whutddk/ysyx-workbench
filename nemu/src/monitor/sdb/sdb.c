@@ -80,6 +80,34 @@ static int cmd_info(char *args) {
   return 0;
 }
 
+static int cmd_x(char *args) {
+  char *cnt_str = strtok(args, " ");
+  char *address_str = cnt_str + strlen(cnt_str) + 1;
+
+  int cnt;
+  long address;
+
+  if (cnt_str == NULL) { 
+    cnt = 1;
+    address = 0x80000000;
+   } else {
+    cnt = atoi(cnt_str);
+  }
+
+  if ( address_str == NULL ) {
+    address = 0x80000000;
+  } else if ( address_str[0] == '0' && address_str[1] == 'x') {
+    address = strtoul (address_str+2, NULL, 16);
+  } else {
+    address = atoi(address_str);
+  }
+
+  printf("cnt = %d, address = %lx ( %ld )", cnt, address, address);
+  
+
+  return 0;
+}
+
 
 static int cmd_help(char *args);
 
@@ -95,7 +123,7 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
   { "si", "Continue the execution of the program by N steps, and than pause, default N is 1", cmd_si },
   { "info", "Display ths status of register for \" info r \" or Display ths status of WatchPoint for \" info w \" ", cmd_info },
-
+  { "x", "x N EXPR, Dispaly N words in hex-format, whose memory-address is begining at EXPR", cmd_x},
   /* TODO: Add more commands */
 
 };
