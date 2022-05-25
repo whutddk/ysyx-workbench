@@ -6,6 +6,7 @@
 
 #include "stdlib.h"
 
+
 static int is_batch_mode = false;
 
 void init_regex();
@@ -56,7 +57,13 @@ static int cmd_si(char *args) {
 }
 
 static int cmd_info(char *args) {
-  printf( "arg is %s", args );
+  // printf( "arg is %s\n", args );
+  extern const char* regs[];
+  for (int i = 0; i < 32; i ++) {
+    if (strcmp(args, regs[i]) == 0) {
+      printf("args is %s, regs is %s \n", args, regs[i]);
+    }
+  }
   return 0;
 }
 
