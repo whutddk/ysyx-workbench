@@ -112,7 +112,7 @@ static int cmd_x(char *args) {
 
   // printf("cnt = %d, address = 0x%lx ( %ld )\n", cnt, address, address);
   for ( int i = 0; i < cnt; i ++ ) {
-    printf( "%lx\n", paddr_read(address + i*4, 4) );
+    printf( "%lx -> 0x%lx\n", (address + i*4), paddr_read(address + i*4, 4) );
   }
   
 
