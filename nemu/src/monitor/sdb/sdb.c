@@ -86,9 +86,9 @@ static int cmd_x(char *args) {
 
   char *cnt_str = strtok(args, " ");
 
-  printf("%s", cnt_str);
+  printf("%s\n", cnt_str);
   char *address_str = args + strlen(cnt_str) + 1;
-  printf("%s", address_str);
+  printf("%s\n", address_str);
 
 
   if (cnt_str == NULL) { 
@@ -106,7 +106,7 @@ static int cmd_x(char *args) {
     address = atoi(address_str);
   }
 
-  printf("cnt = %d, address = %lx ( %ld )", cnt, address, address);
+  printf("cnt = %d, address = 0x%lx ( %ld )\n", cnt, address, address);
   
 
   return 0;
