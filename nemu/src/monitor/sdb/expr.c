@@ -171,6 +171,7 @@ static uint32_t eval(uint8_t p, uint8_t q) {
           ( tokens[op].type == '*' ) ||
           ( tokens[op].type == '/')
         ) {
+        printf( "parentheses_cnt is %d\n", parentheses_cnt );
         if ( parentheses_cnt == 0 ) {
           if ( ((tokens[op].type == '*') || (tokens[op].type == '/')) &&
                ((op_type == '+') || (op_type == '-'))
