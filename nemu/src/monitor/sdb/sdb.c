@@ -119,6 +119,13 @@ static int cmd_x(char *args) {
   return 0;
 }
 
+static int cmd_expr(char *args) {
+  bool res;
+  expr(args, &res);
+  printf( "Expr result is %d\n", res);
+  return 0;
+}
+
 
 static int cmd_help(char *args);
 
@@ -135,6 +142,7 @@ static struct {
   { "si", "Continue the execution of the program by N steps, and than pause, default N is 1", cmd_si },
   { "info", "Display ths status of register for \" info r \" or Display ths status of WatchPoint for \" info w \" ", cmd_info },
   { "x", "x N EXPR, Dispaly N words in hex-format, whose memory-address is begining at EXPR", cmd_x},
+  { "expr", "test expr", cmd_expr}
   /* TODO: Add more commands */
 
 };
