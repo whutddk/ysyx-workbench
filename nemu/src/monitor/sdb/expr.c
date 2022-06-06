@@ -135,7 +135,14 @@ static bool make_token(char *e) {
 
 
 static bool check_parentheses(uint8_t p, uint8_t q) {
-  printf(" p = %d, q = %d\n", p, q);
+
+  // printf(" p = %d, q = %d\n", p, q);
+
+  printf( "CHECKING PARENTHESES!!!\n" );
+  for ( uint8_t i = p; i <= q; i ++ ) {
+    printf("%c", tokens[i].type);
+  }
+   printf("\n");
 
   uint8_t cnt = 0;
   for ( uint8_t i = p; i <= q; i ++ ) {
