@@ -164,25 +164,26 @@ static uint32_t eval(uint8_t p, uint8_t q) {
     int op_type = TK_NOTYPE;
     uint8_t parentheses_cnt = 0;
 
-    for ( op = p; op < q; op ++ ) {
-      if ( tokens[op].type == TK_NUM ) { ; }
-      else if ( tokens[op].type == TK_NOTYPE) { assert(0); }
+    for ( int i = p; i < q; i ++ ) {
+      if ( tokens[i].type == TK_NUM ) { ; }
+      else if ( tokens[i].type == TK_NOTYPE) { assert(0); }
       else if (
-          ( tokens[op].type == '+' ) ||
-          ( tokens[op].type == '-' ) ||
-          ( tokens[op].type == '*' ) ||
-          ( tokens[op].type == '/')
+          ( tokens[i].type == '+' ) ||
+          ( tokens[i].type == '-' ) ||
+          ( tokens[i].type == '*' ) ||
+          ( tokens[i].type == '/')
         ) {
         printf( "op_type is %c\n", op_type );
         printf( "parentheses_cnt is %d\n", parentheses_cnt );
         if ( parentheses_cnt == 0 ) {
-          if ( ((tokens[op].type == '*') || (tokens[op].type == '/')) &&
+          if ( ((tokens[i].type == '*') || (tokens[i].type == '/')) &&
                ((op_type == '+') || (op_type == '-'))
             ) {
             printf( "continue!!!\n" );
             continue;
           } else {
-            op_type = tokens[op].type;            
+            op_type = tokens[i].type;
+            op = i;
           }
         }
         printf( "op_type is %c\n", op_type );
