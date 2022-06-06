@@ -103,45 +103,14 @@ static bool make_token(char *e) {
             break;
 
           case(TK_NOTYPE): break;
-
           case('+'): 
-            tokens[nr_token].type = '+';
-            tokens[nr_token].str[0] = 0;
-            nr_token ++;
-            break;
-
           case('-'): 
-            tokens[nr_token].type = '-';
-            tokens[nr_token].str[0] = 0;
-            nr_token ++;
-            break;
-
           case('*'): 
-            tokens[nr_token].type = '*';
-            tokens[nr_token].str[0] = 0;
-            nr_token ++;
-            break;
-
           case('/'): 
-            tokens[nr_token].type = '/';
-            tokens[nr_token].str[0] = 0;
-            nr_token ++;
-            break;
-
           case('('): 
-            tokens[nr_token].type = '(';
-            tokens[nr_token].str[0] = 0;
-            nr_token ++;
-            break;
-
           case(')'): 
-            tokens[nr_token].type = ')';
-            tokens[nr_token].str[0] = 0;
-            nr_token ++;
-            break;
-
           case(TK_EQ): 
-            tokens[nr_token].type = TK_EQ;
+            tokens[nr_token].type = rules[i].token_type;
             tokens[nr_token].str[0] = 0;
             nr_token ++;
             break;
@@ -164,6 +133,76 @@ static bool make_token(char *e) {
 }
 
 
+
+static bool check_parentheses(uint8_t p, uint8_t q) {
+  uint8_t cnt = 0;
+  for ( uint8_t i = p; i <= q; i ++ ) {
+    if( tokens[i].type == '(' ) { cnt ++; }
+    else if( tokens[i].type == ')' ) { assert( cnt > 0 ); cnt --; }
+  }
+  assert( cnt == 0 );
+  
+  return (tokens[p].type == '(') && (tokens[q].type == ')');
+
+}
+
+static uint32_t eval(uint8_t p, uint8_t q) {
+  if( p > q ) {
+    assert(0);
+  }
+  else if( p == q ) {
+    assert(tokens[p].type == TK_NUM);
+    return atoi(tokens[p].str);
+  }
+  else if( check_parentheses(p, q) == true ) {
+    return eval(p+1, q-1);
+  }
+  else { // check_parentheses(p, q) == false
+    uint8_t op = 0;
+    int op_type = TK_NOTYPE;
+    uint8_t parentheses_cnt = 0;
+
+    for ( op = p; op < q; op ++ ) {
+      if ( tokens[op].type == TK_NUM ) { ; }
+      else if ( tokens[op].type == TK_NOTYPE) { assert(0); }
+      else if (
+          ( tokens[op].type == '+' ) ||
+          ( tokens[op].type == '-' ) ||
+          ( tokens[op].type == '*' ) ||
+          ( tokens[op].type == '/')
+        ) {
+        if ( parentheses_cnt == 0 ) {
+          op_type = tokens[op].type;
+          break;
+        }
+      }
+      else if ( tokens[op].type == '(') {
+        parentheses_cnt ++;
+      }
+      else if ( tokens[op].type == ')') {
+        assert( parentheses_cnt > 0 );
+        parentheses_cnt --;
+      }
+      else if ( tokens[op].type == TK_EQ) {
+        TODO();
+      }
+    }
+
+    if ( op_type == TK_NOTYPE ) { assert(0); }
+
+    uint32_t val1 = eval(p, op - 1);
+    uint32_t val2 = eval(op + 1, q);
+
+    switch (op_type) {
+      case '+': return val1 + val2; break;
+      case '-': return val1 - val2; break;
+      case '*': return val1 * val2; break;
+      case '/': assert(val2 != 0); return val1 / val2; break;
+      default: assert(0); return 0;
+    }
+  }
+}
+
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
@@ -171,7 +210,7 @@ word_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
+  
 
-  return 0;
+  return eval(0, nr_token-1);
 }
