@@ -200,16 +200,16 @@ static uint32_t eval(uint8_t p, uint8_t q) {
         }
         printf( "op_type is %c\n", op_type );
       }
-      else if ( tokens[op].type == '(') {
+      else if ( tokens[i].type == '(') {
         printf( "tokens[i].type is %c\n", tokens[i].type );
         parentheses_cnt ++;
       }
-      else if ( tokens[op].type == ')') {
+      else if ( tokens[i].type == ')') {
         printf( "tokens[i].type is %c\n", tokens[i].type );
         assert( parentheses_cnt > 0 );
         parentheses_cnt --;
       }
-      else if ( tokens[op].type == TK_EQ) {
+      else if ( tokens[i].type == TK_EQ) {
         TODO();
       }
     }
