@@ -172,8 +172,13 @@ static uint32_t eval(uint8_t p, uint8_t q) {
           ( tokens[op].type == '/')
         ) {
         if ( parentheses_cnt == 0 ) {
-          op_type = tokens[op].type;
-          break;
+          if ( ((tokens[op].type == '*') || (tokens[op].type == '/')) &&
+               ((op_type == '+') || (op_type == '-'))
+            ) {
+            continue;
+          } else {
+            op_type = tokens[op].type;            
+          }
         }
       }
       else if ( tokens[op].type == '(') {
@@ -208,10 +213,9 @@ word_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   } else {
-  /* TODO: Insert codes to evaluate the expression. */
-  
-  *success = true;
-  return eval(0, nr_token-1);    
+    /* TODO: Insert codes to evaluate the expression. */ 
+    *success = true;
+    return eval(0, nr_token-1);    
   }
 
 
