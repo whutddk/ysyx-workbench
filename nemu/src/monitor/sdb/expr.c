@@ -185,7 +185,7 @@ static uint32_t eval(uint8_t p, uint8_t q) {
           ( tokens[i].type == '*' ) ||
           ( tokens[i].type == '/')
         ) {
-        printf( "op_type is %c\n", op_type );
+        printf( "tokens[i].type is %c\n", tokens[i].type );
         printf( "parentheses_cnt is %d\n", parentheses_cnt );
         if ( parentheses_cnt == 0 ) {
           if ( ((tokens[i].type == '*') || (tokens[i].type == '/')) &&
@@ -201,9 +201,11 @@ static uint32_t eval(uint8_t p, uint8_t q) {
         printf( "op_type is %c\n", op_type );
       }
       else if ( tokens[op].type == '(') {
+        printf( "tokens[i].type is %c\n", tokens[i].type );
         parentheses_cnt ++;
       }
       else if ( tokens[op].type == ')') {
+        printf( "tokens[i].type is %c\n", tokens[i].type );
         assert( parentheses_cnt > 0 );
         parentheses_cnt --;
       }
