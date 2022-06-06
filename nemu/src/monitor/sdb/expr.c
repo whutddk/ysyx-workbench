@@ -98,10 +98,54 @@ static bool make_token(char *e) {
             }
             tokens[nr_token].str[substr_len] = '\0';
 
-            
-            printf( "Number: %s\n", tokens[nr_token].str );
+            // printf( "Number: %s\n", tokens[nr_token].str );
             nr_token ++;
             break;
+
+          case(TK_NOTYPE): break;
+
+          case('+'): 
+            tokens[nr_token].type = '+';
+            tokens[nr_token].str[0] = 0;
+            nr_token ++;
+            break;
+
+          case('-'): 
+            tokens[nr_token].type = '-';
+            tokens[nr_token].str[0] = 0;
+            nr_token ++;
+            break;
+
+          case('*'): 
+            tokens[nr_token].type = '*';
+            tokens[nr_token].str[0] = 0;
+            nr_token ++;
+            break;
+
+          case('/'): 
+            tokens[nr_token].type = '/';
+            tokens[nr_token].str[0] = 0;
+            nr_token ++;
+            break;
+
+          case('('): 
+            tokens[nr_token].type = '(';
+            tokens[nr_token].str[0] = 0;
+            nr_token ++;
+            break;
+
+          case(')'): 
+            tokens[nr_token].type = ')';
+            tokens[nr_token].str[0] = 0;
+            nr_token ++;
+            break;
+
+          case(TK_EQ): 
+            tokens[nr_token].type = TK_EQ;
+            tokens[nr_token].str[0] = 0;
+            nr_token ++;
+            break;
+
 
           default: TODO();
         }
