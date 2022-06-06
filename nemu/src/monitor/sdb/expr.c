@@ -98,9 +98,9 @@ static bool make_token(char *e) {
             }
             tokens[nr_token].str[substr_len] = '\0';
 
-            nr_token ++;
+            
             printf( "Number: %s\n", tokens[nr_token].str );
-
+            nr_token ++;
             break;
 
           default: TODO();
