@@ -87,6 +87,9 @@ static bool make_token(char *e) {
          */
 
         switch (rules[i].token_type) {
+          case(TK_NUM):
+            printf( "Number: %s\n", e + position );
+            break;
           default: TODO();
         }
 
