@@ -140,7 +140,12 @@ static bool check_parentheses(uint8_t p, uint8_t q) {
 
   printf( "CHECKING PARENTHESES!!!\n" );
   for ( uint8_t i = p; i <= q; i ++ ) {
-    printf("%c", tokens[i].type);
+    if ( tokens[i].type == TK_NUM ) {
+      printf("%s ", tokens[i].str);
+    } else {
+      printf("%c", tokens[i].type);      
+    }
+
   }
    printf("\n");
 
