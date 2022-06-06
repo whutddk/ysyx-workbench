@@ -88,8 +88,21 @@ static bool make_token(char *e) {
 
         switch (rules[i].token_type) {
           case(TK_NUM):
-            printf( "Number: %s\n", e );
+
+            tokens[nr_token].type = TK_NUM;
+
+            if( substr_len > 30 ) { assert(0); }
+
+            for ( int k = 0; k < substr_len; k++  ) {
+              tokens[nr_token].str[k] = *(substr_start + k);
+            }
+            tokens[nr_token].str[substr_len] = '\0';
+
+            nr_token ++;
+            printf( "Number: %s\n", tokens[nr_token].str );
+
             break;
+
           default: TODO();
         }
 
