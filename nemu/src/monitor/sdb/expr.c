@@ -109,10 +109,10 @@ static bool make_token(char *e) {
 
             if( substr_len > 32 ) { assert(0); }
 
-            for ( int k = 0; k < substr_len; k++  ) {
-              tokens[nr_token].str[k] = *(substr_start + k + 2);
+            for ( int k = 2; k < substr_len; k++  ) {
+              tokens[nr_token].str[k-2] = *(substr_start + k);
             }
-            tokens[nr_token].str[substr_len+2] = '\0';
+            tokens[nr_token].str[substr_len-2] = '\0';
 
             // printf( "Number: %s\n", tokens[nr_token].str );
             nr_token ++;
@@ -211,27 +211,27 @@ static uint64_t eval(uint8_t p, uint8_t q) {
           ( tokens[i].type == '*' ) ||
           ( tokens[i].type == '/')
         ) {
-        printf( "tokens[i].type is %c\n", tokens[i].type );
-        printf( "parentheses_cnt is %d\n", parentheses_cnt );
+        // printf( "tokens[i].type is %c\n", tokens[i].type );
+        // printf( "parentheses_cnt is %d\n", parentheses_cnt );
         if ( parentheses_cnt == 0 ) {
           if ( ((tokens[i].type == '*') || (tokens[i].type == '/')) &&
                ((op_type == '+') || (op_type == '-'))
             ) {
-            printf( "continue!!!\n" );
+            // printf( "continue!!!\n" );
             continue;
           } else {
             op_type = tokens[i].type;
             op = i;
           }
         }
-        printf( "op_type is %c\n", op_type );
+        // printf( "op_type is %c\n", op_type );
       }
       else if ( tokens[i].type == '(') {
-        printf( "tokens[i].type is %c\n", tokens[i].type );
+        // printf( "tokens[i].type is %c\n", tokens[i].type );
         parentheses_cnt ++;
       }
       else if ( tokens[i].type == ')') {
-        printf( "tokens[i].type is %c\n", tokens[i].type );
+        // printf( "tokens[i].type is %c\n", tokens[i].type );
         assert( parentheses_cnt > 0 );
         parentheses_cnt --;
       }
