@@ -12,6 +12,9 @@ static int is_batch_mode = false;
 
 void init_regex();
 void init_wp_pool();
+void new_wp( char* args );
+void free_wp(int NO);
+void info_w();
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -75,7 +78,8 @@ static int cmd_info(char *args) {
   }
 
   if (strcmp(args, "w") == 0) {
-    printf("Warning!! Un-implement feature\n");
+    info_w();
+    // printf("Warning!! Un-implement feature\n");
   }
 
   return 0;
@@ -134,6 +138,18 @@ static int cmd_expr(char *args) {
 
 }
 
+static int cmd_newWatch(char *args) {
+  new_wp( args );
+
+  return 0;
+
+}
+
+static int cmd_deleteWatch(char *args) {
+  free_wp(atoi(args));
+  return 0;
+}
+
 
 static int cmd_help(char *args);
 
@@ -150,7 +166,9 @@ static struct {
   { "si", "Continue the execution of the program by N steps, and than pause, default N is 1", cmd_si },
   { "info", "Display ths status of register for \" info r \" or Display ths status of WatchPoint for \" info w \" ", cmd_info },
   { "x", "x N EXPR, Dispaly N words in hex-format, whose memory-address is begining at EXPR", cmd_x},
-  { "expr", "test expr", cmd_expr}
+  { "expr", "test expr", cmd_expr},
+  { "w", "add a new watchPoint", cmd_newWatch},
+  { "d", "delete a watchPoint", cmd_deleteWatch},
   /* TODO: Add more commands */
 
 };
