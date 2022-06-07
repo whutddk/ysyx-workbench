@@ -4,6 +4,7 @@
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
+#include "memory/paddr.h"
 
 enum {
   TK_NOTYPE = 256, TK_EQ, TK_NE, TK_AND, TK_OR, TK_NUM, TK_HEX, TK_REG, DEREF
@@ -302,8 +303,8 @@ static uint64_t eval(uint8_t p, uint8_t q) {
 
     if( op_type == DEREF ) {
       assert( op == p );
-      uint64_t *val1 = (uint64_t *)(eval(op + 1, q));
-      return *(val1);
+      uint64_t val1 = (eval(op + 1, q));
+      return paddr_read(val1, 4);
     } else {
       uint64_t val1 = eval(p, op - 1);
       uint64_t val2 = eval(op + 1, q);
@@ -349,6 +350,8 @@ word_t expr(char *e, bool *success) {
             (tokens[i - 1].type == '(')
           ) ) {
         tokens[i].type = DEREF;
+        tokens[i].str[0] = '*';
+        tokens[i].str[1] = 0;
       }
     }
 
