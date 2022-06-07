@@ -304,7 +304,7 @@ static uint64_t eval(uint8_t p, uint8_t q) {
     if( op_type == DEREF ) {
       assert( op == p );
       uint64_t val1 = (eval(op + 1, q));
-      return paddr_read(val1, 8);
+      return (((paddr_read(val1+4, 4) << 32) & 0xffffffff00000000) | paddr_read(val1, 4));
     } else {
       uint64_t val1 = eval(p, op - 1);
       uint64_t val2 = eval(op + 1, q);
