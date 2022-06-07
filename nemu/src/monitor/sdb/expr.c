@@ -6,7 +6,7 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ, TK_NUM, TK_HEX
+  TK_NOTYPE = 256, TK_EQ, TK_NE, TK_AND, TK_OR, TK_NUM, TK_HEX
 
   /* TODO: Add more token types */
 
@@ -24,6 +24,9 @@ static struct rule {
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
   {"==", TK_EQ},        // equal
+  {"!=", TK_NE},
+  {"&&", TK_AND},
+  {"||", TK_OR},
 
   {"\\-", '-'},
   {"\\*", '*'},
@@ -126,6 +129,10 @@ static bool make_token(char *e) {
           case('('): 
           case(')'): 
           case(TK_EQ): 
+          case(TK_NE): 
+          case(TK_AND): 
+          case(TK_OR): 
+
             tokens[nr_token].type = rules[i].token_type;
             tokens[nr_token].str[0] = 0;
             nr_token ++;
@@ -209,13 +216,17 @@ static uint64_t eval(uint8_t p, uint8_t q) {
           ( tokens[i].type == '+' ) ||
           ( tokens[i].type == '-' ) ||
           ( tokens[i].type == '*' ) ||
-          ( tokens[i].type == '/')
+          ( tokens[i].type == '/' ) ||
+          ( tokens[i].type == TK_EQ ) ||
+          ( tokens[i].type == TK_NE ) ||
+          ( tokens[i].type == TK_AND ) ||
+          ( tokens[i].type == TK_OR )
         ) {
         // printf( "tokens[i].type is %c\n", tokens[i].type );
         // printf( "parentheses_cnt is %d\n", parentheses_cnt );
         if ( parentheses_cnt == 0 ) {
-          if ( ((tokens[i].type == '*') || (tokens[i].type == '/')) &&
-               ((op_type == '+') || (op_type == '-'))
+          if ( (( (tokens[i].type == '*') || (tokens[i].type == '/')) && ((op_type == '+') || (op_type == '-'))) ||
+               (( (tokens[i].type == TK_EQ) || (tokens[i].type == TK_NE) || (tokens[i].type == TK_AND) || (tokens[i].type == TK_OR) ) && ((op_type == '+') || (op_type == '-') || (op_type == '*') || (op_type == '/')))
             ) {
             // printf( "continue!!!\n" );
             continue;
@@ -235,7 +246,7 @@ static uint64_t eval(uint8_t p, uint8_t q) {
         assert( parentheses_cnt > 0 );
         parentheses_cnt --;
       }
-      else if ( tokens[i].type == TK_EQ) {
+      else {
         TODO();
       }
     }
@@ -250,6 +261,11 @@ static uint64_t eval(uint8_t p, uint8_t q) {
       case '-': return val1 - val2; break;
       case '*': return val1 * val2; break;
       case '/': assert(val2 != 0); return val1 / val2; break;
+      case(TK_EQ):  return val1 == val2; break;
+      case(TK_NE):  return val1 != val2; break;
+      case(TK_AND): return val1 && val2; break;
+      case(TK_OR):  return val1 || val2; break;
+
       default: assert(0); return 0;
     }
   }
