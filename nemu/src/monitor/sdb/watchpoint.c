@@ -107,5 +107,24 @@ void info_w() {
   }
 
 }
-/* TODO: Implement the functionality of watchpoint */
+
+int cmp_w() {
+  WP *p = head;
+  int res = 0;
+  while( p != NULL ) {
+
+    bool isSuccess;
+    uint64_t new = expr(p->expr, &isSuccess);
+
+    if( (p -> pre) != new ) {
+      res = 1;
+      printf( "Watchpoint %d Trigger: expr is %s, perivious result is 0x%lx ( %ld ), new result is 0x%lx ( %ld ) \n", p->NO, p->expr, p->pre, p->pre, new, new );      
+    }
+    p->pre = new;
+    p = p->next;
+  }
+
+  return res;
+}
+
 
