@@ -256,7 +256,7 @@ static uint64_t eval(uint8_t p, uint8_t q) {
     uint8_t parentheses_cnt = 0;
 
     for ( int i = p; i < q; i ++ ) {
-      if ( (tokens[i].type == TK_NUM) || (tokens[i].type == TK_HEX) ) { ; }
+      if ( (tokens[i].type == TK_NUM) || (tokens[i].type == TK_HEX) || (tokens[i].type == TK_REG)) { ; }
       else if ( tokens[i].type == TK_NOTYPE) { assert(0); }
       else if (
           ( tokens[i].type == '+' ) ||
