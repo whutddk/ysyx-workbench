@@ -325,7 +325,7 @@ static uint64_t eval(uint8_t p, uint8_t q) {
   }
 }
 
-word_t expr(char *e, bool *success) {
+uint64_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
     return 0;
