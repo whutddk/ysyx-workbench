@@ -6,7 +6,7 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ, TK_NUM
+  TK_NOTYPE = 256, TK_EQ, TK_NUM, TK_HEX
 
   /* TODO: Add more token types */
 
@@ -29,6 +29,7 @@ static struct rule {
   {"\\*", '*'},
   {"\\/", '/'},
   {"[0-9]+", TK_NUM},
+  {"\\0\\x[0-9]+", TK_HEX},
   {"\\(", '('},
   {"\\)", ')'},
 };
@@ -102,6 +103,21 @@ static bool make_token(char *e) {
             nr_token ++;
             break;
 
+          case(TK_HEX):
+
+            tokens[nr_token].type = TK_HEX;
+
+            if( substr_len > 32 ) { assert(0); }
+
+            for ( int k = 0; k < substr_len; k++  ) {
+              tokens[nr_token].str[k] = *(substr_start + k + 2);
+            }
+            tokens[nr_token].str[substr_len+2] = '\0';
+
+            // printf( "Number: %s\n", tokens[nr_token].str );
+            nr_token ++;
+            break;
+
           case(TK_NOTYPE): break;
           case('+'): 
           case('-'): 
@@ -142,6 +158,8 @@ static bool check_parentheses(uint8_t p, uint8_t q) {
   for ( uint8_t i = p; i <= q; i ++ ) {
     if ( tokens[i].type == TK_NUM ) {
       printf("%s ", tokens[i].str);
+    } else if( tokens[i].type == TK_HEX ) {
+      printf("0x%s ", tokens[i].str);
     } else {
       printf("%c", tokens[i].type);      
     }
@@ -160,13 +178,21 @@ static bool check_parentheses(uint8_t p, uint8_t q) {
 
 }
 
-static uint32_t eval(uint8_t p, uint8_t q) {
+static uint64_t eval(uint8_t p, uint8_t q) {
   if( p > q ) {
     assert(0);
   }
   else if( p == q ) {
-    assert(tokens[p].type == TK_NUM);
-    return atoi(tokens[p].str);
+    if (tokens[p].type == TK_NUM) {
+      return atoi(tokens[p].str);      
+    } else if ( tokens[p].type == TK_HEX ) {
+      return strtoul (tokens[p].str, NULL, 16);      
+    } else {
+      assert(0);
+      return 0;
+    }
+
+
   }
   else if( check_parentheses(p, q) == true ) {
     return eval(p+1, q-1);
@@ -177,7 +203,7 @@ static uint32_t eval(uint8_t p, uint8_t q) {
     uint8_t parentheses_cnt = 0;
 
     for ( int i = p; i < q; i ++ ) {
-      if ( tokens[i].type == TK_NUM ) { ; }
+      if ( (tokens[i].type == TK_NUM) || (tokens[i].type == TK_HEX) ) { ; }
       else if ( tokens[i].type == TK_NOTYPE) { assert(0); }
       else if (
           ( tokens[i].type == '+' ) ||
@@ -216,8 +242,8 @@ static uint32_t eval(uint8_t p, uint8_t q) {
 
     if ( op_type == TK_NOTYPE ) { assert(0); }
 
-    uint32_t val1 = eval(p, op - 1);
-    uint32_t val2 = eval(op + 1, q);
+    uint64_t val1 = eval(p, op - 1);
+    uint64_t val2 = eval(op + 1, q);
 
     switch (op_type) {
       case '+': return val1 + val2; break;
