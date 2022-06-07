@@ -6,7 +6,7 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ, TK_NE, TK_AND, TK_OR, TK_NUM, TK_HEX, TK_REG
+  TK_NOTYPE = 256, TK_EQ, TK_NE, TK_AND, TK_OR, TK_NUM, TK_HEX, TK_REG, DEREF
 
   /* TODO: Add more token types */
 
@@ -166,18 +166,14 @@ static bool make_token(char *e) {
             break;
           case('+'): 
           case('-'): 
-          case('*'): 
+          case('*'):
           case('/'): 
           case('('): 
           case(')'): 
-
-
             tokens[nr_token].type = rules[i].token_type;
             tokens[nr_token].str[0] = 0;
             nr_token ++;
             break;
-
-
           default: TODO();
         }
 
@@ -269,13 +265,15 @@ static uint64_t eval(uint8_t p, uint8_t q) {
           ( tokens[i].type == TK_EQ ) ||
           ( tokens[i].type == TK_NE ) ||
           ( tokens[i].type == TK_AND ) ||
-          ( tokens[i].type == TK_OR )
+          ( tokens[i].type == TK_OR ) ||
+          ( tokens[i].type == DEREF )
         ) {
         // printf( "tokens[i].type is %c\n", tokens[i].type );
         // printf( "parentheses_cnt is %d\n", parentheses_cnt );
         if ( parentheses_cnt == 0 ) {
-          if ( (( (tokens[i].type == '*') || (tokens[i].type == '/')) && ((op_type == '+') || (op_type == '-'))) ||
-               (( (tokens[i].type == TK_EQ) || (tokens[i].type == TK_NE) || (tokens[i].type == TK_AND) || (tokens[i].type == TK_OR) ) && ((op_type == '+') || (op_type == '-') || (op_type == '*') || (op_type == '/')))
+          if ( ( (tokens[i].type == DEREF) && ((op_type == '*') || (op_type == '/')) ) ||
+               (( (tokens[i].type == '*') || (tokens[i].type == '/') || (tokens[i].type == DEREF) ) && ((op_type == '+') || (op_type == '-'))) ||
+               (( (tokens[i].type == '+') || (tokens[i].type == '-') || (tokens[i].type == '*') || (tokens[i].type == '/') || (tokens[i].type == DEREF) ) && ((op_type == TK_EQ) || (op_type == TK_NE) || (op_type == TK_AND) || (op_type == TK_OR)))
             ) {
             // printf( "continue!!!\n" );
             continue;
@@ -302,20 +300,26 @@ static uint64_t eval(uint8_t p, uint8_t q) {
 
     if ( op_type == TK_NOTYPE ) { assert(0); }
 
-    uint64_t val1 = eval(p, op - 1);
-    uint64_t val2 = eval(op + 1, q);
+    if( op_type == DEREF ) {
+      assert( op == p );
+      uint64_t *val1 = (uint64_t *)(eval(op + 1, q));
+      return *(val1);
+    } else {
+      uint64_t val1 = eval(p, op - 1);
+      uint64_t val2 = eval(op + 1, q);
 
-    switch (op_type) {
-      case '+': return val1 + val2; break;
-      case '-': return val1 - val2; break;
-      case '*': return val1 * val2; break;
-      case '/': assert(val2 != 0); return val1 / val2; break;
-      case(TK_EQ):  return val1 == val2; break;
-      case(TK_NE):  return val1 != val2; break;
-      case(TK_AND): return val1 && val2; break;
-      case(TK_OR):  return val1 || val2; break;
+      switch (op_type) {
+        case '+': return val1 + val2; break;
+        case '-': return val1 - val2; break;
+        case '*': return val1 * val2; break;
+        case '/': assert(val2 != 0); return val1 / val2; break;
+        case(TK_EQ):  return val1 == val2; break;
+        case(TK_NE):  return val1 != val2; break;
+        case(TK_AND): return val1 && val2; break;
+        case(TK_OR):  return val1 || val2; break;
 
-      default: assert(0); return 0;
+        default: assert(0); return 0;
+      }      
     }
   }
 }
@@ -327,8 +331,30 @@ word_t expr(char *e, bool *success) {
   } else {
     /* TODO: Insert codes to evaluate the expression. */ 
     *success = true;
+
+    for ( int i = 0; i < nr_token; i ++) {
+      if (
+        (tokens[i].type == '*') &&
+          ( 
+            i == 0 ||
+            (tokens[i - 1].type == TK_EQ) ||
+            (tokens[i - 1].type == TK_NE) ||
+            (tokens[i - 1].type == TK_AND) ||
+            (tokens[i - 1].type == TK_OR) ||
+            (tokens[i - 1].type == DEREF) ||
+            (tokens[i - 1].type == '+') ||
+            (tokens[i - 1].type == '-') ||
+            (tokens[i - 1].type == '*') ||
+            (tokens[i - 1].type == '/') ||
+            (tokens[i - 1].type == '(')
+          ) ) {
+        tokens[i].type = DEREF;
+      }
+    }
+
     return eval(0, nr_token-1);    
   }
 
 
 }
+
