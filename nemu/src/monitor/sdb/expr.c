@@ -199,7 +199,7 @@ static bool check_parentheses(uint8_t p, uint8_t q) {
 
   printf( "CHECKING PARENTHESES!!!\n" );
   for ( uint8_t i = p; i <= q; i ++ ) {
-    if ( (tokens[i].type == TK_NUM) || ( tokens[i].type == TK_EQ ) || ( tokens[i].type == TK_NE ) || ( tokens[i].type == TK_AND ) || ( tokens[i].type == TK_OR ) ) {
+    if ( (tokens[i].type == TK_NUM) || ( tokens[i].type == TK_EQ ) || ( tokens[i].type == TK_NE ) || ( tokens[i].type == TK_AND ) || ( tokens[i].type == TK_OR ) || (tokens[i].type == DEREF) ) {
       printf("%s ", tokens[i].str);
     } else if( tokens[i].type == TK_HEX ) {
       printf("0x%s ", tokens[i].str);
@@ -304,7 +304,7 @@ static uint64_t eval(uint8_t p, uint8_t q) {
     if( op_type == DEREF ) {
       assert( op == p );
       uint64_t val1 = (eval(op + 1, q));
-      return paddr_read(val1, 1);
+      return paddr_read(val1, 8);
     } else {
       uint64_t val1 = eval(p, op - 1);
       uint64_t val2 = eval(op + 1, q);
