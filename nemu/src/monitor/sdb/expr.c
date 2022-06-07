@@ -122,16 +122,42 @@ static bool make_token(char *e) {
             break;
 
           case(TK_NOTYPE): break;
+
+          case(TK_EQ): 
+            tokens[nr_token].type = rules[i].token_type;
+            tokens[nr_token].str[0] = '=';
+            tokens[nr_token].str[1] = '=';
+            tokens[nr_token].str[2] = 0;
+            nr_token ++;
+            break;
+          case(TK_NE): 
+            tokens[nr_token].type = rules[i].token_type;
+            tokens[nr_token].str[0] = '!';
+            tokens[nr_token].str[1] = '=';
+            tokens[nr_token].str[2] = 0;
+            nr_token ++;
+            break;
+          case(TK_AND): 
+            tokens[nr_token].type = rules[i].token_type;
+            tokens[nr_token].str[0] = '&';
+            tokens[nr_token].str[1] = '&';
+            tokens[nr_token].str[2] = 0;
+            nr_token ++;
+            break;
+          case(TK_OR): 
+            tokens[nr_token].type = rules[i].token_type;
+            tokens[nr_token].str[0] = '|';
+            tokens[nr_token].str[1] = '|';
+            tokens[nr_token].str[2] = 0;
+            nr_token ++;
+            break;
           case('+'): 
           case('-'): 
           case('*'): 
           case('/'): 
           case('('): 
           case(')'): 
-          case(TK_EQ): 
-          case(TK_NE): 
-          case(TK_AND): 
-          case(TK_OR): 
+
 
             tokens[nr_token].type = rules[i].token_type;
             tokens[nr_token].str[0] = 0;
@@ -163,7 +189,7 @@ static bool check_parentheses(uint8_t p, uint8_t q) {
 
   printf( "CHECKING PARENTHESES!!!\n" );
   for ( uint8_t i = p; i <= q; i ++ ) {
-    if ( tokens[i].type == TK_NUM ) {
+    if ( (tokens[i].type == TK_NUM) || ( tokens[i].type == TK_EQ ) || ( tokens[i].type == TK_NE ) || ( tokens[i].type == TK_AND ) || ( tokens[i].type == TK_OR ) ) {
       printf("%s ", tokens[i].str);
     } else if( tokens[i].type == TK_HEX ) {
       printf("0x%s ", tokens[i].str);
