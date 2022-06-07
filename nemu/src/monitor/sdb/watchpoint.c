@@ -30,11 +30,20 @@ void init_wp_pool() {
 
 void new_wp( char* args ) {
   WP* p = head;
-  while( p != NULL ) {
-    p = p -> next;
+
+  if(head != NULL) {
+    while( (p -> next) != NULL ) {
+      p = p -> next;
+    }
+    p -> next = free_;
+    p = free_;
+  } else {
+    head = free_;
+    p = free_;
   }
-  p = free_;
-  assert( p != NULL );
+
+    
+  // assert( p != NULL );
 
   assert( strlen(args) < 256 );
   // printf( "Test %s \n", args);
@@ -47,9 +56,6 @@ void new_wp( char* args ) {
   free_ = free_->next;
   p->next = NULL;
 
-  if(head == NULL) {
-    head = p;
-  }
 
   return ;
 }
@@ -60,16 +66,36 @@ void free_wp(int NO) {
 
   assert( p != NULL);
 
-  while( p->NO != NO ) {
-    if ( (p -> next) == NULL) {
-      printf( "watchpoint %d Not Found!\n", NO);
+  if (head->NO == NO) {
+    q = head->next;
+
+    head->next = free_;
+    free_ = head;
+    head = q;
+
+  } else {
+    while( 1 ) {
+      if ( (p -> next) == NULL) {
+        printf( "watchpoint %d Not Found!\n", NO);
+        return;
+      }
+      if( ((p -> next) -> NO) == NO ) {
+        break;
+      }
+      p = p -> next;
     }
-    p = p -> next;
+    q = p;
+    p -> next = p -> next -> next;
+    q -> next = free_;
+    free_ = q;
+
   }
-  q = p;
-  p -> next = q -> next;
-  q -> next = free_;
-  free_ = q;
+
+
+  
+
+
+
 
 }
 
