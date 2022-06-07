@@ -37,15 +37,19 @@ void new_wp( char* args ) {
   assert( p != NULL );
 
   assert( strlen(args) < 256 );
-  printf( "Test %s \n", args);
+  // printf( "Test %s \n", args);
   strcpy(p->expr, args);
-  printf( "Test %s \n", p->expr);
+  // printf( "Test %s \n", p->expr);
 
   bool isSuccess;
   p->pre = expr(p->expr, &isSuccess);
 
   free_ = free_->next;
   p->next = NULL;
+
+  if(head == NULL) {
+    head = p;
+  }
 
   return ;
 }
