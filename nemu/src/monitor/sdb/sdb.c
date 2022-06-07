@@ -121,10 +121,10 @@ static int cmd_x(char *args) {
 
 static int cmd_expr(char *args) {
   bool isSuccess;
-  uint32_t res = expr(args, &isSuccess);
+  uint64_t res = expr(args, &isSuccess);
   
   if ( isSuccess ) {
-    printf( "Expr result is %d\n", res);  
+    printf( "Expr result is %ld\n", res);  
        
   } else {
     printf( "Expr Failed\n");
