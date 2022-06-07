@@ -199,7 +199,7 @@ static bool check_parentheses(uint8_t p, uint8_t q) {
 
   printf( "CHECKING PARENTHESES!!!\n" );
   for ( uint8_t i = p; i <= q; i ++ ) {
-    if ( (tokens[i].type == TK_NUM) || ( tokens[i].type == TK_EQ ) || ( tokens[i].type == TK_NE ) || ( tokens[i].type == TK_AND ) || ( tokens[i].type == TK_OR ) || (tokens[i].type == DEREF) ) {
+    if ( (tokens[i].type == TK_NUM) || ( tokens[i].type == TK_EQ ) || ( tokens[i].type == TK_NE ) || ( tokens[i].type == TK_AND ) || ( tokens[i].type == TK_OR ) || (tokens[i].type == DEREF) || (tokens[i].type == TK_REG) ) {
       printf("%s ", tokens[i].str);
     } else if( tokens[i].type == TK_HEX ) {
       printf("0x%s ", tokens[i].str);
