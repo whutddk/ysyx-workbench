@@ -6,7 +6,7 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ, TK_NE, TK_AND, TK_OR, TK_NUM, TK_HEX
+  TK_NOTYPE = 256, TK_EQ, TK_NE, TK_AND, TK_OR, TK_NUM, TK_HEX, TK_REG
 
   /* TODO: Add more token types */
 
@@ -27,6 +27,7 @@ static struct rule {
   {"\\!\\=", TK_NE},
   {"\\&\\&", TK_AND},
   {"\\|\\|", TK_OR},
+  {"\\$[a-z0-3]+", TK_REG},
 
   {"\\-", '-'},
   {"\\*", '*'},
@@ -120,6 +121,18 @@ static bool make_token(char *e) {
             // printf( "Number: %s\n", tokens[nr_token].str );
             nr_token ++;
             break;
+
+          case(TK_REG):
+            tokens[nr_token].type = TK_REG;
+
+            if( substr_len > 30 ) { assert(0); }
+
+            for ( int k = 1; k < substr_len; k++  ) {
+              tokens[nr_token].str[k-1] = *(substr_start + k);
+            }
+            tokens[nr_token].str[substr_len-1] = '\0';
+
+            nr_token ++;
 
           case(TK_NOTYPE): break;
 
@@ -220,6 +233,16 @@ static uint64_t eval(uint8_t p, uint8_t q) {
       return atoi(tokens[p].str);      
     } else if ( tokens[p].type == TK_HEX ) {
       return strtoul (tokens[p].str, NULL, 16);      
+    } else if ( tokens[p].type == TK_REG ) {
+      bool isSuccess;
+      uint64_t reg = isa_reg_str2val(tokens[p].str, &isSuccess);
+      if( isSuccess ) {
+        return reg;        
+      } else {
+        printf( "Reg Mis-match\n" );
+        return 0;
+      }
+
     } else {
       assert(0);
       return 0;
